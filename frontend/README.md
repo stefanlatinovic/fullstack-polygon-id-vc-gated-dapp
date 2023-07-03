@@ -17,7 +17,7 @@ This is an opinionated template for creating VC gated dapps with
 
 #### 0. Follow server setup instructions
 
-Before starting the frontend, run the server by following [the server instructions](https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/tree/main/server). You need the ngrok url from the server in order to start the frontend.
+Before starting the frontend, run the server by following [the server instructions](https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/tree/main/server). You need the ngrok url from the server in order to start the frontend.
 
 #### 1. Install frontend dependencies with --legacy-peer-deps
 
@@ -64,14 +64,14 @@ I've documented a similar hosting process here: https://github.com/oceans404/ful
 This frontend interacts with the verifier server to
 
 - Watch for events emitted by socket for the user's specific sessionId
-  - frontend: https://github.com/oceans404/vc-gated-website/blob/main/src/PolygonIDVerifier.js#L48
+  - frontend: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/frontend/src/PolygonIDVerifier.js#L57
   - backend:
-    - getAuthQr in progress https://github.com/oceans404/vc-verifier/blob/main/index.js#L63
-    - getAuthQr done: https://github.com/oceans404/vc-verifier/blob/main/index.js#L86
-    - handleVerification in progress: https://github.com/oceans404/vc-verifier/blob/main/index.js#L100
-    - handleVerification done: https://github.com/oceans404/vc-verifier/blob/main/index.js#L135
+    - getAuthQr in progress https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L76
+    - getAuthQr done: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L113
+    - handleVerification in progress: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L146
+    - handleVerification done: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L200
 - Request the QR code containing the birthday query (zk request) for display
-  - frontend fetch: https://github.com/oceans404/vc-gated-website/blob/main/src/PolygonIDVerifier.js#L62
-  - backend getAuthQr: https://github.com/oceans404/vc-verifier/blob/main/index.js#L37
-  - backend birthday query: https://github.com/oceans404/vc-verifier/blob/main/proofRequest.js
-- Report verification result to the rest of the app: https://github.com/oceans404/vc-gated-website/blob/main/src/App.js#L39
+  - frontend fetch: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/frontend/src/PolygonIDVerifier.js#L84
+  - backend getAuthQr: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L68
+  - backend birthday https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#L130
+- Report verification result to the rest of the app: https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/frontend/src/App.js#L44
