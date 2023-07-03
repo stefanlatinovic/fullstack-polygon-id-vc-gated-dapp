@@ -20,6 +20,8 @@ import { io } from "socket.io-client";
 const linkDownloadPolygonIDWalletApp =
   "https://0xpolygonid.github.io/tutorials/wallet/wallet-overview/#quick-start";
 
+let socket;
+
 function PolygonIDVerifier({
   credentialType,
   issuerOrHowToLink,
@@ -38,24 +40,37 @@ function PolygonIDVerifier({
 
   // serverUrl is localServerURL if not running in prod
   // Note: the verification callback will always come from the publicServerURL
-  const serverUrl = window.location.href.startsWith("https")
+  const windowLocation = window.location;
+  const serverUrl = windowLocation.protocol === "https:"
     ? publicServerURL
     : localServerURL;
+
+  if (!socket) {
+    const uri = windowLocation.protocol === "https:" ? "wss:" : "ws:";
+    socket = new WebSocket(uri + "//" + serverUrl.replace(/^https?:\/\//, '') + "/ws");
+  }
 
   const getQrCodeApi = (sessionId) =>
     serverUrl + `/api/get-auth-qr?sessionId=${sessionId}`;
 
-  const socket = io(serverUrl);
-
   useEffect(() => {
-    socket.on("connect", () => {
-      setSessionId(socket.id);
-
-      // only watch this session's events
-      socket.on(socket.id, (arg) => {
-        setSocketEvents((socketEvents) => [...socketEvents, arg]);
-      });
-    });
+    socket.onmessage = (event) => {
+      if (event.data) {
+        let data;
+        try {
+          data = JSON.parse(event.data);
+        } catch (e) {
+          return console.error(e);
+        }
+        if (data) {
+          if (data.sessionId) {
+            setSessionId(data.sessionId);
+          } else if (data.status) {
+            setSocketEvents((socketEvents) => [...socketEvents, data]);
+          }
+        }
+      }
+    };
   }, []);
 
   useEffect(() => {

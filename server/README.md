@@ -4,7 +4,7 @@ This repo contains the server code you'll need to set up a VC (Verifiable Creden
 
 ## Server functionality
 
-- Allows [Socket.io polling](https://socket.io/docs/v3/how-it-works/) to emit session specific events back to connected clients
+- Emit session specific events back to connected clients by using [WebSocket](https://github.com/gorilla/websocket) protocol
 
 - Generates a [Query Based Request](https://0xpolygonid.github.io/tutorials/verifier/verification-library/request-api-guide/#query-based-request) in the form of a QR code that the user can scan to prove they own a credential that satisfies certain requirements. It also specifies the callback endpoint for verification
 
@@ -16,7 +16,8 @@ This repo contains the server code you'll need to set up a VC (Verifiable Creden
 
 ```bash
 cd server
-npm i
+go mod download
+go mod tidy
 ```
 
 #### 2. Create a .env file by copying my sample
@@ -34,7 +35,7 @@ cp .env.sample .env;
 #### 3. Run your server on port 8080
 
 ```bash
-npm start
+go run .
 ```
 
 #### 4. Set up ngrok server forwarding (required!)
@@ -59,7 +60,7 @@ Forwarding  https://abc-your-forwarding-address-def.ngrok-free.app -> http://loc
 HOSTED_SERVER_URL="https://abc-your-forwarding-address-def.ngrok-free.app"
 ```
 
-#### 6. Optionally customize your own proof request by changing the credentialSubject in [`proofRequest.js`](https://github.com/oceans404/vc-verifier/blob/main/proofRequest.js)
+#### 6. Optionally customize your own proof request by changing the credentialSubject in [`main.go`](https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go)
 
 ex 1: User must have Taylor Swift's [exact](https://0xpolygonid.github.io/tutorials/verifier/verification-library/zk-query-language/#equals-operator-1) birthday - December 13, 1989
 
@@ -83,9 +84,9 @@ ex 2: User's KYCAgeCredential documentType must be [greater than](https://0xpoly
 
 ```
 
-**default: [proofRequest](https://github.com/oceans404/vc-verifier/blob/main/proofRequest.js#L8)**
+**default: [credentialSubject](https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go#98)**
 
-If you don't customize `proofRequest.js`, this server will send a verification request for an KYCAgeCredential proof with a birthday before January 1, 2023 to the [credentialAtomicQuerySigV2 circuit](https://docs.iden3.io/protocol/main-circuits/#credentialatomicquerysigv2). This circuit is specified by the circuitId in `vcHelpers/KYCAgeCredential.js`, set to credentialAtomicQuerySigV2.
+If you don't customize credentialSubject in [`main.go`](https://github.com/stefanlatinovic/fullstack-polygon-id-vc-gated-dapp/blob/main/server/main.go), this server will send a verification request for an KYCAgeCredential proof with a birthday before January 1, 2023 to the [credentialAtomicQuerySigV2 circuit](https://docs.iden3.io/protocol/main-circuits/#credentialatomicquerysigv2). This circuit is specified by the circuitId in `vcHelpers/KYCAgeCredential.js`, set to credentialAtomicQuerySigV2.
 
 ```js
 {
